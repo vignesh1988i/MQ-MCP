@@ -1,6 +1,6 @@
 # MQ-MCP Server
 
-A Model Context Protocol (MCP) server for IBM MQ (Message Queue) management and interaction. This server enables Claude and other MCP clients to query and manage IBM MQ queue managers, queues, and channels by connecting to a FastAPI application that wraps the IBM MQ REST API.
+A Model Context Protocol (MCP) server for IBM MQ (Message Queue) management and interaction. This server runs through **ollama-mcp-bridge** to enable Claude and other MCP clients to query and manage IBM MQ queue managers, queues, and channels by connecting to a FastAPI application that wraps the IBM MQ REST API.
 
 ## Author
 
@@ -8,7 +8,7 @@ A Model Context Protocol (MCP) server for IBM MQ (Message Queue) management and 
 
 ## Purpose
 
-The MQ-MCP Server acts as a bridge between MCP clients (like Claude Desktop) and a FastAPI application (fastapi-app). The FastAPI application wraps the IBM MQ REST API to provide access to IBM MQ infrastructure. MQ-MCP provides tools that connect to this FastAPI application to enable:
+The MQ-MCP Server is an MCP tool that integrates with **ollama-mcp-bridge** to act as a bridge between MCP clients (like Claude Desktop) and a FastAPI application (fastapi-app). The FastAPI application wraps the IBM MQ REST API to provide access to IBM MQ infrastructure. MQ-MCP provides tools that connect to this FastAPI application to enable:
 
 - List and monitor queue managers
 - View queue manager status
@@ -76,9 +76,9 @@ PASSWORD = "Password123"
 TOKEN_EXPIRY_MINUTES = 15
 ```
 
-### Optional Configuration
+### ollama-mcp-bridge Configuration
 
-For Claude Desktop integration, update your `mcp_config.json`:
+The MQ-MCP Server runs through **ollama-mcp-bridge** using the `mcp_config.json` file. Update your `mcp_config.json` to include the MQ-MCP server configuration:
 
 ```json
 {
@@ -94,7 +94,9 @@ For Claude Desktop integration, update your `mcp_config.json`:
 ## Architecture
 
 ```
-Claude Desktop (or MCP Client)
+Claude Desktop (or LLM Client)
+    ↓
+ollama-mcp-bridge (--config mcp_config.json --port 8090)
     ↓
 MQ-MCP Server (mqmcpserver.py)
     ↓
@@ -110,10 +112,12 @@ IBM MQ Infrastructure
 ### Starting the Server
 
 ```bash
-python mqmcpserver.py
+ollama-mcp-bridge --config mcp_config.json --port 8090
 ```
 
-The server will start with stdio transport, ready to handle MCP client requests.
+This command starts the ollama-mcp-bridge with the MQ-MCP server configuration. The bridge will listen on port 8090 and use the MCP server tools to interact with your IBM MQ infrastructure through the fastapi-app.
+
+**Note**: Do NOT run `python mqmcpserver.py` directly. The MQ-MCP server is invoked by ollama-mcp-bridge based on the `mcp_config.json` configuration.
 
 ### Available Tools
 
