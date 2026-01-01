@@ -1,0 +1,40 @@
+# Exclude specific files
+mcp_mq_server.py
+mcp_server_config.json
+test_mcp_client.py
+requirements.txt
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Environment variables
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Hidden files (except .gitignore)
+.*
+!.gitignore
+
+# OS
+.DS_Store
+Thumbs.db

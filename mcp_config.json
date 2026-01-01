@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "mq-fastapi-server": {
+      "command": "D:\\mq-mcp-server\\venv\\Scripts\\python.exe",
+      "args": ["D:\\mq-mcp-server\\mqmcpserver.py"]
+    }
+  }
+}
