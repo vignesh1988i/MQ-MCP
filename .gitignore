@@ -4,6 +4,9 @@ mcp_server_config.json
 test_mcp_client.py
 requirements.txt
 
+# Log files
+*.log
+
 # Virtual Environment
 venv/
 env/
