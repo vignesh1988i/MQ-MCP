@@ -227,6 +227,8 @@ See `requirements_mqmcpserver.txt` for all dependencies:
 - mcp (Model Context Protocol)
 - httpx (Async HTTP client)
 - fastmcp (FastMCP framework)
+- python-dotenv (Environment variable management)
+- ollama-mcp-bridge (Ollama MCP integration)
 
 ## Error Handling
 
@@ -276,6 +278,17 @@ mq-mcp-server/
 - Keep credentials secure - consider using environment variables for production
 - Token expiry is configurable; adjust based on your security requirements
 - MQSC command support depends on your fastapi-app implementation
+
+### About ollama-mcp-bridge
+
+**ollama-mcp-bridge** is integrated into this project to enable AI-powered interactions with your IBM MQ infrastructure. It bridges the gap between MCP servers (like MQ-MCP) and Ollama language models, allowing you to:
+
+- Use local Ollama LLMs to analyze and interpret MQ data
+- Generate intelligent insights from queue manager status and queue metrics
+- Automate complex MQ operations based on LLM recommendations
+- Leverage natural language processing for better MQ management
+
+This integration enables a more intuitive and intelligent interface to your IBM MQ systems through conversational AI.
 
 ## License
 
