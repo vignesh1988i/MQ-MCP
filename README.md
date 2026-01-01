@@ -1,6 +1,6 @@
 # MQ-MCP Server
 
-A Model Context Protocol (MCP) server for IBM MQ (Message Queue) management and interaction. This server enables Claude and other MCP clients to query and manage IBM MQ queue managers, queues, and channels through a secure, authenticated FastAPI backend.
+A Model Context Protocol (MCP) server for IBM MQ (Message Queue) management and interaction. This server enables Claude and other MCP clients to query and manage IBM MQ queue managers, queues, and channels by connecting to a FastAPI application that wraps the IBM MQ REST API.
 
 ## Author
 
@@ -8,7 +8,7 @@ A Model Context Protocol (MCP) server for IBM MQ (Message Queue) management and 
 
 ## Purpose
 
-The MQ-MCP Server provides a bridge between MCP clients (like Claude Desktop) and IBM MQ infrastructure. It allows users to:
+The MQ-MCP Server acts as a bridge between MCP clients (like Claude Desktop) and a FastAPI application (fastapi-app). The FastAPI application wraps the IBM MQ REST API to provide access to IBM MQ infrastructure. MQ-MCP provides tools that connect to this FastAPI application to enable:
 
 - List and monitor queue managers
 - View queue manager status
@@ -33,7 +33,7 @@ The MQ-MCP Server provides a bridge between MCP clients (like Claude Desktop) an
 ### Prerequisites
 
 - Python 3.8 or higher
-- Access to a running FastAPI server with IBM MQ backend
+- A running **fastapi-app** instance (which wraps the IBM MQ REST API)
 - pip package manager
 
 ### Setup
@@ -62,13 +62,13 @@ The MQ-MCP Server provides a bridge between MCP clients (like Claude Desktop) an
 
 ### Required Settings
 
-Edit `mqmcpserver.py` and update the following configuration variables:
+Edit `mqmcpserver.py` and update the following configuration variables to connect to your fastapi-app instance:
 
 ```python
-# FastAPI server endpoint
+# FastAPI application endpoint (the app that wraps IBM MQ REST API)
 URL_BASE = "http://localhost:8080"
 
-# FastAPI credentials
+# Credentials for fastapi-app authentication
 USER_NAME = "admin"
 PASSWORD = "Password123"
 
@@ -89,6 +89,20 @@ For Claude Desktop integration, update your `mcp_config.json`:
     }
   }
 }
+```
+
+## Architecture
+
+```
+Claude Desktop (or MCP Client)
+    ↓
+MQ-MCP Server (mqmcpserver.py)
+    ↓
+fastapi-app (wraps IBM MQ REST API)
+    ↓
+IBM MQ REST API
+    ↓
+IBM MQ Infrastructure
 ```
 
 ## Usage
@@ -227,15 +241,15 @@ The server includes robust error handling for:
 
 ### Connection Error: "Cannot connect to FastAPI server"
 
-1. Verify the FastAPI server is running on `URL_BASE`
-2. Check network connectivity
-3. Verify firewall settings
+1. Verify the **fastapi-app** instance is running on `URL_BASE`
+2. Check network connectivity to the fastapi-app endpoint
+3. Verify firewall settings allow connections to fastapi-app
 
 ### Authentication Error: "No access token found in response"
 
-1. Verify username and password are correct
-2. Check that the `/token` endpoint is accessible
-3. Review FastAPI server logs for authentication issues
+1. Verify username and password are correct for fastapi-app
+2. Check that the `/token` endpoint is accessible on fastapi-app
+3. Review fastapi-app server logs for authentication issues
 
 ### 401 Unauthorized Errors
 
@@ -257,10 +271,11 @@ mq-mcp-server/
 
 ## Notes
 
-- Ensure your FastAPI backend server is running before starting the MCP server
+- Ensure your **fastapi-app** instance is running before starting the MQ-MCP Server
+- The fastapi-app should be properly configured to connect to your IBM MQ infrastructure
 - Keep credentials secure - consider using environment variables for production
 - Token expiry is configurable; adjust based on your security requirements
-- MQSC command support depends on your FastAPI implementation
+- MQSC command support depends on your fastapi-app implementation
 
 ## License
 
